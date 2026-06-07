@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import random
 import tkinter as tk
+from tkinter import ttk, font, simpledialog
 
 from tkinter import ttk, font
 
@@ -16,7 +17,11 @@ class VocabularyQuizApp:
         self.checked = False
         self.score = 0
         self.total = 0
-
+        
+        self.user_name = simpledialog.askstring("이름 입력", "플레이어의 이름을 입력해주세요:")
+        
+        if not self.user_name or not self.user_name.strip():
+            self.user_name = "Guest"
         self.default_font = font.nametofont("TkDefaultFont")
         self.default_font.configure(family="NanumGothic", size=12)
 
@@ -26,8 +31,7 @@ class VocabularyQuizApp:
 
         self.word_var = tk.StringVar(value="단어를 불러오는 중...")
         self.feedback_var = tk.StringVar(value="")
-        self.score_var = tk.StringVar(value="Score: 0/0")
-
+        self.score_var = tk.StringVar(value=f"[{self.user_name}] Score: 0/0")
         ttk.Label(root, text="영단어").pack(pady=(16, 4))
         ttk.Label(root, textvariable=self.word_var, font=("NanumGothic", 24)).pack()
 
@@ -68,4 +72,7 @@ class VocabularyQuizApp:
         else:
             self.feedback_var.set(f"오답입니다. 정답: {self.current.meaning}")
         self.score_var.set(f"Score: {self.score}/{self.total}")
+        self.check_button.state(["disabled"])
+
+        self.score_var.set(f"[{self.user_name}] Score: {self.score}/{self.total}")
         self.check_button.state(["disabled"])
